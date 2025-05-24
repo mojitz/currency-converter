@@ -9,12 +9,12 @@
       <div class="form-row">
         <mat-form-field>
           <mat-label>Amount ({{ form.value.base }})</mat-label>
-          <input (focus)="activeField.set('base')" matInput type="number" formControlName="baseAmount" />
+          <input (focus)="activeField.set('base')" matInput type="number" formControlName="baseAmount"/>
         </mat-form-field>
         <mat-form-field>
           <mat-label>Base Currency</mat-label>
           <mat-select formControlName="base">
-            @for (c of uniqueCurrencies(); track c.key) {
+            @for (c of filteredBaseCurrencies; track c.key) {
               <mat-option [value]="c.key">{{ c.label }}</mat-option>
             }
           </mat-select>
@@ -22,13 +22,13 @@
       </div>
       <div class="form-row">
         <mat-form-field>
-        <mat-label>Amount ({{ form.value.target }})</mat-label>
-        <input (focus)="activeField.set('target')" matInput type="number" formControlName="targetAmount" />
-      </mat-form-field>
+          <mat-label>Amount ({{ form.value.target }})</mat-label>
+          <input (focus)="activeField.set('target')" matInput type="number" formControlName="targetAmount"/>
+        </mat-form-field>
         <mat-form-field>
           <mat-label>Target Currency</mat-label>
           <mat-select formControlName="target">
-            @for (c of uniqueCurrencies(); track c.key) {
+            @for (c of filteredTargetCurrencies; track c.key) {
               <mat-option [value]="c.key">{{ c.label }}</mat-option>
             }
           </mat-select>
