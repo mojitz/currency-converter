@@ -8,10 +8,15 @@ import {MatOptionModule} from '@angular/material/core';
 import {MatCardModule} from '@angular/material/card';
 import {toSignal as rxToSignal} from '@angular/core/rxjs-interop';
 
-export interface CurrencyRate {
+export interface CurrencyRateEntry {
   base: { key: string; label: string };
   target: { key: string; label: string };
   baseToTargetRate: number;
+}
+
+export interface CurrencyRate {
+  rates: CurrencyRateEntry[];
+  updatedAt: string | Date | undefined;
 }
 
 @Component({
@@ -27,7 +32,8 @@ export interface CurrencyRate {
   styleUrl: './currency-converter.component.scss'
 })
 export class CurrencyConverterComponent {
-  rates = input<Array<CurrencyRate>>();
+  currenciesMetaData = input<CurrencyRate>();
+  rates = computed(() => this.currenciesMetaData()?.rates);
   uniqueCurrencies = computed(() => {
     const map = new Map<string, string>();
     if (!this.rates) {
@@ -42,19 +48,24 @@ export class CurrencyConverterComponent {
   private fb = inject(NonNullableFormBuilder);
 
   public get filteredBaseCurrencies() {
-    const target = this.form.controls.target.value;
-    return this.uniqueCurrencies().filter(
-      (c) => c.key !== target || c.key === this.form.value.base
+    const target = this.form.value.target;
+    return this.uniqueCurrencies().filter(c =>
+      (c.key !== target || c.key === this.form.value.base) &&
+      this.hasRate(c.key, target)
     );
   };
 
   public get filteredTargetCurrencies() {
-    const base = this.form.controls.base.value;
-    return this.uniqueCurrencies().filter(
-      (c) => c.key !== base || c.key === this.form.value.target
+    const base = this.form.value.base;
+    return this.uniqueCurrencies().filter(c =>
+      (c.key !== base || c.key === this.form.value.target) &&
+      this.hasRate(base, c.key)
     );
   };
-
+  readonly localUpdateTime = computed(() => {
+    const raw = this.currenciesMetaData()?.updatedAt;
+    return raw ? new Date(raw).toLocaleString() : '';
+  });
   form = this.fb.group({
     base: 'EUR' as string,
     target: 'USD' as string,
@@ -83,6 +94,7 @@ export class CurrencyConverterComponent {
       const base = this.base();
       const target = this.target();
       const rate = this.getRate(base, target);
+      if (!rate) console.warn('No rate found for', base, target);
       if (!rate) return;
 
       if (this.activeField() === 'base') {
@@ -100,7 +112,9 @@ export class CurrencyConverterComponent {
       }
     });
   }
-
+  private hasRate(base: string | undefined, target: string | undefined): boolean {
+    return this.rates()?.some(r => r.base.key === base && r.target.key === target) ?? false;
+  }
   private getRate(base: string, target: string): number | undefined {
     return (
       this.rates()?.find(
