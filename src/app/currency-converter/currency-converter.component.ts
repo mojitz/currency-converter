@@ -62,6 +62,11 @@ export class CurrencyConverterComponent {
       this.hasRate(base, c.key)
     );
   };
+  readonly relativeUpdateTime = computed(() => {
+    const raw = this.currenciesMetaData()?.updatedAt;
+    if (!raw) return '';
+    return this.getRelativeTime(new Date(raw));
+  });
   readonly localUpdateTime = computed(() => {
     const raw = this.currenciesMetaData()?.updatedAt;
     return raw ? new Date(raw).toLocaleString() : '';
@@ -111,6 +116,18 @@ export class CurrencyConverterComponent {
         }, {emitEvent: false});
       }
     });
+  }
+  getRelativeTime(date: Date): string {
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMinutes = Math.floor(diffMs / 60000);
+
+    if (diffMinutes < 1) return 'just now';
+    if (diffMinutes < 60) return `${diffMinutes} minute(s) ago`;
+    const diffHours = Math.floor(diffMinutes / 60);
+    if (diffHours < 24) return `${diffHours} hour(s) ago`;
+    const diffDays = Math.floor(diffHours / 24);
+    return `${diffDays} day(s) ago`;
   }
   private hasRate(base: string | undefined, target: string | undefined): boolean {
     return this.rates()?.some(r => r.base.key === base && r.target.key === target) ?? false;

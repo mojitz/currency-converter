@@ -11,7 +11,7 @@ import {CurrencyConverterComponent} from './currency-converter/currency-converte
 export class AppComponent {
   title = 'currency-converter';
   currencyData = {
-    updatedAt: new Date(),
+    updatedAt: this.getRandomDate(),
     rates: [
       {
         base: { key: 'EUR', label: 'Euro' },
@@ -45,4 +45,10 @@ export class AppComponent {
       },
     ],
   };
+  private getRandomDate() {
+    const now = new Date();
+    const twoHoursAgo = new Date(now.getTime() - 2 * 60 * 60 * 1000);
+    const randomTime = twoHoursAgo.getTime() + Math.random() * (now.getTime() - twoHoursAgo.getTime());
+    return new Date(randomTime);
+  }
 }
