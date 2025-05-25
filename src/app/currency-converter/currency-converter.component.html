@@ -1,10 +1,11 @@
-<div class="converter-card">
-  <h2 class="converter-title">{{ labels().title }}</h2>
+<div class="converter-card" role="region" aria-labelledby="currency-converter-title">
+  <h2 id="currency-converter-title" class="converter-title">{{ labels().title }}</h2>
 
   <form [formGroup]="form" class="converter-form">
     <div class="form-row">
       <div class="field">
         <input
+          aria-label="Base amount"
           type="number"
           formControlName="baseAmount"
           (focus)="activeField.set('base')"
@@ -13,12 +14,12 @@
       <div class="vertical-line"></div>
       <div class="field">
         <div class="select-wrapper">
-          <select formControlName="base">
+          <select formControlName="base" aria-label="Base currency">
             @for (c of filterCurrencies(form.value.target, 'base'); track c.key) {
               <option [value]="c.key">{{ c.label }}</option>
             }
           </select>
-          <span class="select-arrow">
+          <span class="select-arrow" aria-hidden="true">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
               <path d="M7 10l5 5 5-5z" />
             </svg>
@@ -31,6 +32,7 @@
       <div class="field">
         <input
           type="number"
+          aria-label="Target amount"
           formControlName="targetAmount"
           (focus)="activeField.set('target')"
         />
@@ -39,12 +41,12 @@
 
       <div class="field">
         <div class="select-wrapper">
-          <select formControlName="target">
+          <select formControlName="target" aria-label="Target currency">
             @for (c of filterCurrencies(form.value.target, 'target'); track c.key) {
               <option [value]="c.key">{{ c.label }}</option>
             }
           </select>
-          <span class="select-arrow">
+          <span class="select-arrow" aria-hidden="true">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
               <path d="M7 10l5 5 5-5z" />
             </svg>
