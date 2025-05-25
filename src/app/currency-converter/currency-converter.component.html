@@ -1,44 +1,50 @@
-<mat-card appearance="outlined" class="converter-card">
-  <mat-card-header>
-    <mat-card-title>Rate Converter</mat-card-title>
-  </mat-card-header>
+<div class="converter-card">
+  <h2 class="converter-title">Currency Converter</h2>
 
-  <mat-card-content>
-    <form [formGroup]="form" class="converter-form">
-      <div class="form-row">
-        <mat-form-field>
-          <mat-label>Amount ({{ form.value.base }})</mat-label>
-          <input (focus)="activeField.set('base')" matInput type="number" formControlName="baseAmount"/>
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label>Base Currency</mat-label>
-          <mat-select formControlName="base">
-            @for (c of filteredBaseCurrencies; track c.key) {
-              <mat-option [value]="c.key" >{{ c.label }}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
+  <form [formGroup]="form" class="converter-form">
+    <div class="form-row">
+      <div class="field">
+        <input
+          type="number"
+          formControlName="baseAmount"
+          (focus)="activeField.set('base')"
+        />
       </div>
-      <div class="form-row">
-        <mat-form-field>
-          <mat-label>Amount ({{ form.value.target }})</mat-label>
-          <input (focus)="activeField.set('target')" matInput type="number" formControlName="targetAmount"/>
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label>Target Currency</mat-label>
-          <mat-select formControlName="target">
-            @for (c of filteredTargetCurrencies; track c.key) {
-              <mat-option [value]="c.key" >{{ c.label }}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
-        <div class="rate-summary">
-          1 {{ form.value.base }} = {{ getRate(form.value.base, form.value.target) }} {{ form.value.target }}
-        </div>
+      <div class="vertical-line"></div>
+      <div class="field">
+        <select formControlName="base">
+          @for (c of filteredBaseCurrencies; track c.key) {
+            <option [value]="c.key">{{ c.label }}</option>
+          }
+        </select>
       </div>
-    </form>
-  </mat-card-content>
-  <mat-card-footer>
-    <div>Updated: {{ relativeUpdateTime() }}</div>
-  </mat-card-footer>
-</mat-card>
+    </div>
+
+    <div class="form-row">
+      <div class="field">
+        <input
+          type="number"
+          formControlName="targetAmount"
+          (focus)="activeField.set('target')"
+        />
+      </div>
+      <div class="vertical-line"></div>
+
+      <div class="field">
+        <select formControlName="target">
+          @for (c of filteredTargetCurrencies; track c.key) {
+            <option [value]="c.key">{{ c.label }}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    <p class="rate-summary">
+      1 {{ form.value.base }} = {{ getRate(form.value.base, form.value.target) }} {{ form.value.target }}
+    </p>
+
+    <p class="updated-time">
+      Updated: {{ relativeUpdateTime() }}
+    </p>
+  </form>
+</div>

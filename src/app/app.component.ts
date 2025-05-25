@@ -75,7 +75,7 @@ export class AppComponent {
       }
     ]
   };
-  customTheme = { primary: '#0d47a1', secondary: '#ff6f00', background: '#fefefe' }
+  customTheme = { primary: '#0d47a1', secondary: '#ff6f00', background: '#fefefe', surface: '#f5f5f5' };
   private getRandomDate() {
     const now = new Date();
     const twoHoursAgo = new Date(now.getTime() - 2 * 60 * 60 * 1000);

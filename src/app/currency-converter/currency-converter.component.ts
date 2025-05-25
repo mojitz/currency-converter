@@ -1,11 +1,7 @@
 import {Component, inject, signal, computed, input, effect,HostBinding} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ReactiveFormsModule, NonNullableFormBuilder} from '@angular/forms';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatSelectModule} from '@angular/material/select';
-import {MatInputModule} from '@angular/material/input';
-import {MatOptionModule} from '@angular/material/core';
-import {MatCardModule} from '@angular/material/card';
+
 import {toSignal as rxToSignal} from '@angular/core/rxjs-interop';
 
 export interface CurrencyRateEntry {
@@ -28,12 +24,7 @@ export interface themeColors {
 @Component({
   selector: 'app-currency-converter',
   imports: [CommonModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    MatOptionModule,
-    MatCardModule],
+    ReactiveFormsModule],
   templateUrl: './currency-converter.component.html',
   styleUrl: './currency-converter.component.scss'
 })
@@ -53,7 +44,12 @@ export class CurrencyConverterComponent {
     return Array.from(map.entries()).map(([key, label]) => ({key, label}));
   });
   private fb = inject(NonNullableFormBuilder);
+  openBaseDropdown = false;
+  openTargetDropdown = false;
 
+  getLabel(key: string | undefined): string {
+    return this.uniqueCurrencies().find(c => c.key === key)?.label ?? key ?? '';
+  }
   public get filteredBaseCurrencies() {
     const target = this.form.value.target;
     return this.uniqueCurrencies().filter(c =>
