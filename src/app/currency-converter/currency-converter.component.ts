@@ -35,7 +35,7 @@ export class CurrencyConverterComponent {
   labels = input<Partial<Record<
     'title' | 'updated' |
     'justNow' | 'minute' | 'minutes' |
-    'hour' | 'hours' | 'yesterday' | 'days',
+    'hour' | 'hours' | 'yesterday' | 'days' | 'noData',
     string
   >>>({
     title: 'Currency Converter',
@@ -47,6 +47,7 @@ export class CurrencyConverterComponent {
     hours: 'hours ago',
     yesterday: 'yesterday',
     days: 'days ago',
+    noData: 'Exchange rate data could not be found.'
   });
   rates = computed(() => this.currenciesMetaData()?.rates);
   uniqueCurrencies = computed(() => {

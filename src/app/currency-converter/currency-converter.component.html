@@ -1,66 +1,69 @@
 <div class="converter-card" role="region" aria-labelledby="currency-converter-title">
   <h2 id="currency-converter-title" class="converter-title">{{ labels().title }}</h2>
-
-  <form [formGroup]="form" class="converter-form">
-    <div class="form-row">
-      <div class="field">
-        <input
-          aria-label="Base amount"
-          type="number"
-          formControlName="baseAmount"
-          (focus)="activeField.set('base')"
-        />
-      </div>
-      <div class="vertical-line"></div>
-      <div class="field">
-        <div class="select-wrapper">
-          <select formControlName="base" aria-label="Base currency">
-            @for (c of filterCurrencies(form.value.target, 'base'); track c.key) {
-              <option [value]="c.key">{{ c.label }}</option>
-            }
-          </select>
-          <span class="select-arrow" aria-hidden="true">
+  @if (!currenciesMetaData || !uniqueCurrencies().length) {
+    <h3 class="converter-empty">{{labels().noData}}</h3>
+  } @else {
+    <form [formGroup]="form" class="converter-form">
+      <div class="form-row">
+        <div class="field">
+          <input
+            aria-label="Base amount"
+            type="number"
+            formControlName="baseAmount"
+            (focus)="activeField.set('base')"
+          />
+        </div>
+        <div class="vertical-line"></div>
+        <div class="field">
+          <div class="select-wrapper">
+            <select formControlName="base" aria-label="Base currency">
+              @for (c of filterCurrencies(form.value.target, 'base'); track c.key) {
+                <option [value]="c.key">{{ c.label }}</option>
+              }
+            </select>
+            <span class="select-arrow" aria-hidden="true">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
               <path d="M7 10l5 5 5-5z" />
             </svg>
           </span>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="form-row">
-      <div class="field">
-        <input
-          type="number"
-          aria-label="Target amount"
-          formControlName="targetAmount"
-          (focus)="activeField.set('target')"
-        />
-      </div>
-      <div class="vertical-line"></div>
+      <div class="form-row">
+        <div class="field">
+          <input
+            type="number"
+            aria-label="Target amount"
+            formControlName="targetAmount"
+            (focus)="activeField.set('target')"
+          />
+        </div>
+        <div class="vertical-line"></div>
 
-      <div class="field">
-        <div class="select-wrapper">
-          <select formControlName="target" aria-label="Target currency">
-            @for (c of filterCurrencies(form.value.target, 'target'); track c.key) {
-              <option [value]="c.key">{{ c.label }}</option>
-            }
-          </select>
-          <span class="select-arrow" aria-hidden="true">
+        <div class="field">
+          <div class="select-wrapper">
+            <select formControlName="target" aria-label="Target currency">
+              @for (c of filterCurrencies(form.value.target, 'target'); track c.key) {
+                <option [value]="c.key">{{ c.label }}</option>
+              }
+            </select>
+            <span class="select-arrow" aria-hidden="true">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
               <path d="M7 10l5 5 5-5z" />
             </svg>
           </span>
+          </div>
         </div>
       </div>
-    </div>
 
-    <p class="rate-summary">
-      1 {{ form.value.base }} = {{ getRate(form.value.base, form.value.target) }} {{ form.value.target }}
-    </p>
+      <p class="rate-summary">
+        1 {{ form.value.base }} = {{ getRate(form.value.base, form.value.target) }} {{ form.value.target }}
+      </p>
 
-    <p class="updated-time">
-      {{ labels().updated }}: {{ relativeUpdateTime() }}
-    </p>
-  </form>
+      <p class="updated-time">
+        {{ labels().updated }}: {{ relativeUpdateTime() }}
+      </p>
+    </form>
+  }
 </div>

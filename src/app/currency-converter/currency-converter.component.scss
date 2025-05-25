@@ -25,7 +25,11 @@ $surface-color: var(--surface, #365482);
   font-size: 1.75rem;
   margin-bottom: 2rem;
 }
-
+.converter-empty {
+  text-align: center;
+  color: $secondary-color;
+  margin-bottom: 2rem;
+}
 .converter-form {
   display: flex;
   flex-direction: column;
