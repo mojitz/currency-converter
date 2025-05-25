@@ -1,4 +1,4 @@
-import {Component, inject, signal, computed, input, effect,HostBinding} from '@angular/core';
+import {Component, inject, signal, computed, input, effect,ViewEncapsulation,HostBinding} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ReactiveFormsModule, NonNullableFormBuilder} from '@angular/forms';
 
@@ -23,6 +23,7 @@ export interface themeColors {
 
 @Component({
   selector: 'app-currency-converter',
+  encapsulation: ViewEncapsulation.ShadowDom,
   imports: [CommonModule,
     ReactiveFormsModule],
   templateUrl: './currency-converter.component.html',
@@ -31,6 +32,22 @@ export interface themeColors {
 export class CurrencyConverterComponent {
   currenciesMetaData = input<CurrencyRate>();
   theme = input<themeColors>();
+  labels = input<Partial<Record<
+    'title' | 'updated' |
+    'justNow' | 'minute' | 'minutes' |
+    'hour' | 'hours' | 'yesterday' | 'days',
+    string
+  >>>({
+    title: 'Currency Converter',
+    updated: 'Updated',
+    justNow: 'just now',
+    minute: 'minute ago',
+    minutes: 'minutes ago',
+    hour: 'hour ago',
+    hours: 'hours ago',
+    yesterday: 'yesterday',
+    days: 'days ago',
+  });
   rates = computed(() => this.currenciesMetaData()?.rates);
   uniqueCurrencies = computed(() => {
     const map = new Map<string, string>();
@@ -44,27 +61,15 @@ export class CurrencyConverterComponent {
     return Array.from(map.entries()).map(([key, label]) => ({key, label}));
   });
   private fb = inject(NonNullableFormBuilder);
-  openBaseDropdown = false;
-  openTargetDropdown = false;
-
-  getLabel(key: string | undefined): string {
-    return this.uniqueCurrencies().find(c => c.key === key)?.label ?? key ?? '';
+  filterCurrencies(excludeKey: string | undefined, direction: 'base' | 'target') {
+   if (!excludeKey) return [];
+    return this.uniqueCurrencies().filter(c => {
+      const pairBase = direction === 'base' ? c.key : this.form.value.base;
+      const pairTarget = direction === 'target' ? c.key : this.form.value.target;
+      return (c.key !== excludeKey || c.key === this.form.value[direction]) &&
+        this.hasRate(pairBase, pairTarget);
+    });
   }
-  public get filteredBaseCurrencies() {
-    const target = this.form.value.target;
-    return this.uniqueCurrencies().filter(c =>
-      (c.key !== target || c.key === this.form.value.base) &&
-      this.hasRate(c.key, target)
-    );
-  };
-
-  public get filteredTargetCurrencies() {
-    const base = this.form.value.base;
-    return this.uniqueCurrencies().filter(c =>
-      (c.key !== base || c.key === this.form.value.target) &&
-      this.hasRate(base, c.key)
-    );
-  };
   readonly relativeUpdateTime = computed(() => {
     const raw = this.currenciesMetaData()?.updatedAt;
     if (!raw) return '';
@@ -99,38 +104,42 @@ export class CurrencyConverterComponent {
 
   constructor() {
     effect(() => {
-      const base = this.base();
-      const target = this.target();
-      const rate = this.getRate(base, target);
-      if (!rate) console.warn('No rate found for', base, target);
-      if (!rate) return;
-
-      if (this.activeField() === 'base') {
-        const baseAmt = this.baseAmount();
-        this.form.patchValue({
-          targetAmount: +(baseAmt * rate).toFixed(4),
-        }, {emitEvent: false});
-      }
-
-      if (this.activeField() === 'target') {
-        const targetAmt = this.targetAmount();
-        this.form.patchValue({
-          baseAmount: +(targetAmt / rate).toFixed(4),
-        }, {emitEvent: false});
-      }
+      this.updateConvertedAmount(this.base(), this.target(), this.activeField());
     });
+  }
+  updateConvertedAmount(base: string, target: string, active: 'base' | 'target') {
+    const rate = this.getRate(base, target);
+    if (!rate) return;
+
+    if (active === 'base') {
+      const baseAmt = this.baseAmount();
+      this.form.patchValue({
+        targetAmount: +(baseAmt * rate).toFixed(4),
+      }, { emitEvent: false });
+    } else {
+      const targetAmt = this.targetAmount();
+      this.form.patchValue({
+        baseAmount: +(targetAmt / rate).toFixed(4),
+      }, { emitEvent: false });
+    }
   }
   getRelativeTime(date: Date): string {
     const now = new Date();
     const diffMs = now.getTime() - date.getTime();
     const diffMinutes = Math.floor(diffMs / 60000);
+    const l = this.labels();
 
-    if (diffMinutes < 1) return 'just now';
-    if (diffMinutes < 60) return `${diffMinutes} minute(s) ago`;
+    if (diffMinutes < 1) return l.justNow ?? 'just now';
+    if (diffMinutes < 2) return `1 ${l.minute ?? 'minute ago'}`;
+    if (diffMinutes < 60) return `${diffMinutes} ${l.minutes ?? 'minutes ago'}`;
+
     const diffHours = Math.floor(diffMinutes / 60);
-    if (diffHours < 24) return `${diffHours} hour(s) ago`;
+    if (diffHours < 2) return `1 ${l.hour ?? 'hour ago'}`;
+    if (diffHours < 24) return `${diffHours} ${l.hours ?? 'hours ago'}`;
+
     const diffDays = Math.floor(diffHours / 24);
-    return `${diffDays} day(s) ago`;
+    if (diffDays < 2) return l.yesterday ?? 'yesterday';
+    return `${diffDays} ${l.days ?? 'days ago'}`;
   }
   private hasRate(base: string | undefined, target: string | undefined): boolean {
     return this.rates()?.some(r => r.base.key === base && r.target.key === target) ?? false;
