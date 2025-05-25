@@ -1,3 +1,4 @@
+import 'zone.js';
 import { createCustomElement } from '@angular/elements';
 import { CurrencyConverterComponent } from './app/currency-converter/currency-converter.component';
 import { createApplication } from '@angular/platform-browser';

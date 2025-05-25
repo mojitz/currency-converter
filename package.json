@@ -7,8 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "build:bundle": "ng build --configuration production --output-hashing=none && npm run concat:bundle",
-    "concat:bundle": "npx concat -f dist/browser/polyfills.js dist/currency-converter/browser/main.js -o dist/currency-converter/browser/bundle.js"
+    "build:bundle": "ng build --configuration production --output-hashing=none && cp dist/currency-converter/browser/main.js dist/bundle.js"
   },
   "private": true,
   "dependencies": {
