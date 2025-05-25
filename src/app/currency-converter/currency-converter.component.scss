@@ -3,21 +3,35 @@
   --secondary: #03dac6;
   --background: #0d2853;
   --surface: #2b3d6a;
+
+  --border-radius: 1rem;
+  --padding: 2rem;
+  --font-family: 'Roboto', sans-serif;
+  --input-height: 3rem;
+  --font-size: 1rem;
+  --field-gap: 0.25rem;
 }
 
-$primary-color: var(--primary, #dae6f9);
-$secondary-color: var(--secondary, #03dac6);
-$background-color: var(--background, #0d2853);
-$surface-color: var(--surface, #365482);
+$primary-color: var(--primary);
+$secondary-color: var(--secondary);
+$background-color: var(--background);
+$surface-color: var(--surface);
+
+$border-radius: var(--border-radius);
+$padding: var(--padding);
+$font-family: var(--font-family);
+$input-height: var(--input-height);
+$font-size: var(--font-size);
+$field-gap: var(--field-gap);
 
 .converter-card {
   background-color: $background-color;
   color: $primary-color;
-  padding: 2rem;
-  border-radius: 1rem;
+  padding: $padding;
+  border-radius: $border-radius;
   max-width: 520px;
   margin: auto;
-  font-family: 'Roboto', sans-serif;
+  font-family: $font-family;
 }
 
 .converter-title {
@@ -25,11 +39,7 @@ $surface-color: var(--surface, #365482);
   font-size: 1.75rem;
   margin-bottom: 2rem;
 }
-.converter-empty {
-  text-align: center;
-  color: $secondary-color;
-  margin-bottom: 2rem;
-}
+
 .converter-form {
   display: flex;
   flex-direction: column;
@@ -38,9 +48,9 @@ $surface-color: var(--surface, #365482);
 
 .form-row {
   display: flex;
-  gap: 1px; // 🔥 thin vertical line
+  gap: 1px;
   background-color: $surface-color;
-  border-radius: 0.75rem;
+  border-radius: $border-radius;
 
   @media (max-width: 600px) {
     flex-direction: column;
@@ -51,21 +61,21 @@ $surface-color: var(--surface, #365482);
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: $field-gap;
 }
 
 input,
 select {
   padding: 0.75rem 1rem;
   padding-right: 2rem;
-  border-radius: 0.75rem;
+  border-radius: $border-radius;
   border: none;
   background-color: $surface-color;
   color: $primary-color;
-  font-size: 1rem;
+  font-size: $font-size;
   width: 100%;
   line-height: 1.2;
-  height: 3rem;
+  height: $input-height;
   box-sizing: border-box;
   appearance: none;
   transition: background 0.3s, outline 0.2s;
