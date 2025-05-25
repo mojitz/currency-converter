@@ -1,7 +1,6 @@
 <mat-card appearance="outlined" class="converter-card">
   <mat-card-header>
     <mat-card-title>Rate Converter</mat-card-title>
-    <mat-card-subtitle>Updated: {{ relativeUpdateTime() }}</mat-card-subtitle>
   </mat-card-header>
 
   <mat-card-content>
@@ -15,7 +14,7 @@
           <mat-label>Base Currency</mat-label>
           <mat-select formControlName="base">
             @for (c of filteredBaseCurrencies; track c.key) {
-              <mat-option [value]="c.key">{{ c.label }}</mat-option>
+              <mat-option [value]="c.key" >{{ c.label }}</mat-option>
             }
           </mat-select>
         </mat-form-field>
@@ -29,11 +28,17 @@
           <mat-label>Target Currency</mat-label>
           <mat-select formControlName="target">
             @for (c of filteredTargetCurrencies; track c.key) {
-              <mat-option [value]="c.key">{{ c.label }}</mat-option>
+              <mat-option [value]="c.key" >{{ c.label }}</mat-option>
             }
           </mat-select>
         </mat-form-field>
+        <div class="rate-summary">
+          1 {{ form.value.base }} = {{ getRate(form.value.base, form.value.target) }} {{ form.value.target }}
+        </div>
       </div>
     </form>
   </mat-card-content>
+  <mat-card-footer>
+    <div>Updated: {{ relativeUpdateTime() }}</div>
+  </mat-card-footer>
 </mat-card>

@@ -43,8 +43,39 @@ export class AppComponent {
         target: { key: 'CAD', label: 'Canadian Dollar' },
         baseToTargetRate: 1.7162,
       },
-    ],
+      {
+        base: { key: 'USD', label: 'US Dollar' },
+        target: { key: 'EUR', label: 'Euro' },
+        baseToTargetRate: 0.9289
+      },
+      {
+        base: { key: 'CHF', label: 'Swiss Franc' },
+        target: { key: 'EUR', label: 'Euro' },
+        baseToTargetRate: 1.0236
+      },
+      {
+        base: { key: 'GBP', label: 'British Pound' },
+        target: { key: 'EUR', label: 'Euro' },
+        baseToTargetRate: 1.1651
+      },
+      {
+        base: { key: 'JPY', label: 'Japanese Yen' },
+        target: { key: 'USD', label: 'US Dollar' },
+        baseToTargetRate: 0.00647
+      },
+      {
+        base: { key: 'USD', label: 'US Dollar' },
+        target: { key: 'CHF', label: 'Swiss Franc' },
+        baseToTargetRate: 0.9073
+      },
+      {
+        base: { key: 'CAD', label: 'Canadian Dollar' },
+        target: { key: 'GBP', label: 'British Pound' },
+        baseToTargetRate: 0.5827
+      }
+    ]
   };
+  customTheme = { primary: '#0d47a1', secondary: '#ff6f00', background: '#fefefe' }
   private getRandomDate() {
     const now = new Date();
     const twoHoursAgo = new Date(now.getTime() - 2 * 60 * 60 * 1000);

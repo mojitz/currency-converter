@@ -1,4 +1,4 @@
-import {Component, inject, signal, computed, input, effect} from '@angular/core';
+import {Component, inject, signal, computed, input, effect,HostBinding} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ReactiveFormsModule, NonNullableFormBuilder} from '@angular/forms';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -18,6 +18,12 @@ export interface CurrencyRate {
   rates: CurrencyRateEntry[];
   updatedAt: string | Date | undefined;
 }
+export interface themeColors {
+  primary?: string;
+  secondary?: string;
+  background?: string;
+  surface?: string;
+}
 
 @Component({
   selector: 'app-currency-converter',
@@ -33,6 +39,7 @@ export interface CurrencyRate {
 })
 export class CurrencyConverterComponent {
   currenciesMetaData = input<CurrencyRate>();
+  theme = input<themeColors>();
   rates = computed(() => this.currenciesMetaData()?.rates);
   uniqueCurrencies = computed(() => {
     const map = new Map<string, string>();
@@ -132,7 +139,7 @@ export class CurrencyConverterComponent {
   private hasRate(base: string | undefined, target: string | undefined): boolean {
     return this.rates()?.some(r => r.base.key === base && r.target.key === target) ?? false;
   }
-  private getRate(base: string, target: string): number | undefined {
+  protected getRate(base: string |undefined, target: string|undefined): number | undefined {
     return (
       this.rates()?.find(
         (r) => r.base.key === base && r.target.key === target
