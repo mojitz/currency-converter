@@ -70,6 +70,10 @@ export class CurrencyConverterComponent {
         this.hasRate(pairBase, pairTarget);
     });
   }
+  @HostBinding('style.--primary') primaryColor = '';
+  @HostBinding('style.--secondary') secondaryColor = '';
+  @HostBinding('style.--background') backgroundColor = '';
+  @HostBinding('style.--surface') surfaceColor = '';
   readonly relativeUpdateTime = computed(() => {
     const raw = this.currenciesMetaData()?.updatedAt;
     if (!raw) return '';
@@ -105,6 +109,11 @@ export class CurrencyConverterComponent {
   constructor() {
     effect(() => {
       this.updateConvertedAmount(this.base(), this.target(), this.activeField());
+      const theme = this.theme() ?? {};
+      this.primaryColor = theme.primary ?? '';
+      this.secondaryColor = theme.secondary ?? '';
+      this.backgroundColor = theme.background ?? '';
+      this.surfaceColor = theme.surface ?? '';
     });
   }
   updateConvertedAmount(base: string, target: string, active: 'base' | 'target') {

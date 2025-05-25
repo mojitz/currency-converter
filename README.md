@@ -1,59 +1,75 @@
-# CurrencyConverter
+# Currency Converter Web Component
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.5.
+A customizable and accessible currency converter web component built with Angular. It supports theming, localization, and accepts custom currency data.
 
-## Development server
+## Usage
 
-To start a local development server, run:
-
-```bash
-ng serve
+```html
+<app-currency-converter
+  [currenciesMetaData]="yourCurrencyData"
+  [theme]="{ primary: '#000', background: '#fff' }"
+  [labels]="{ title: 'My Converter', updated: 'Last Updated' }">
+</app-currency-converter>
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Inputs
 
-## Code scaffolding
+| Name               | Type                                     | Required | Default                                                                                      | Description |
+|--------------------|------------------------------------------|----------|----------------------------------------------------------------------------------------------|-------------|
+| `currenciesMetaData` | `CurrencyRate`                          | Yes      | –                                                                                            | Currency data with rates and timestamps. See structure below. |
+| `theme`            | `Partial<themeColors>`                   | No       | `{ primary: #dae6f9, secondary: #03dac6, background: #0d2853, surface: #365482 }`            | Customize tool colors. Can also be overridden with CSS custom properties. |
+| `labels`           | `Partial<Record<...>>` (see below)       | No       | See default label values below                                                               | Localize or override static text like title and timestamps. |
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## CurrencyRate structure
 
-```bash
-ng generate component component-name
+```ts
+interface CurrencyRateEntry {
+  base: { key: string; label: string };
+  target: { key: string; label: string };
+  baseToTargetRate: number;
+}
+
+interface CurrencyRate {
+  rates: CurrencyRateEntry[];
+  updatedAt: string | Date;
+}
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Label Keys
 
-```bash
-ng generate --help
+These can be partially overridden:
+
+| Key         | Default          | Purpose                                  |
+|-------------|------------------|------------------------------------------|
+| `title`     | Currency Converter | Component heading                        |
+| `updated`   | Updated           | Timestamp prefix                         |
+| `justNow`   | just now          | 0-minute fallback                        |
+| `minute`    | minute ago        | Singular minute                          |
+| `minutes`   | minutes ago       | Plural minutes                           |
+| `hour`      | hour ago          | Singular hour                            |
+| `hours`     | hours ago         | Plural hours                             |
+| `yesterday` | yesterday         | 1-day fallback                           |
+| `days`      | days ago          | Plural days                              |
+
+## Styling
+
+You can also override styling using CSS variables scoped to the component:
+
+```css
+app-currency-converter {
+  --primary: #222;
+  --secondary: #08d;
+  --background: #fefefe;
+  --surface: #ddd;
+}
 ```
 
-## Building
+## Accessibility
 
-To build the project run:
+- Keyboard accessible
+- ARIA roles and labels
+- WCAG AA compliant color defaults (can be customized)
 
-```bash
-ng build
-```
+## Integration
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+The component uses Shadow DOM encapsulation and is easy to embed in any modern framework or static HTML.

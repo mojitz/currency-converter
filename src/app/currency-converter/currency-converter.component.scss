@@ -1,9 +1,8 @@
 :host {
-  /* 🔧 Public theming variables (used inside, not enforced) */
   --primary: #dae6f9;
   --secondary: #03dac6;
   --background: #0d2853;
-  --surface: #365482;
+  --surface: #2b3d6a;
 }
 
 $primary-color: var(--primary, #dae6f9);
