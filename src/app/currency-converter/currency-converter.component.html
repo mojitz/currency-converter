@@ -1,7 +1,7 @@
 <div class="converter-card" role="region" aria-labelledby="currency-converter-title">
   <h2 id="currency-converter-title" class="converter-title">{{ labels().title }}</h2>
   @if (!currenciesMetaData || !uniqueCurrencies().length) {
-    <h3 class="converter-empty">{{labels().noData}}</h3>
+    <h3 class="converter-empty">{{ labels().noData }}</h3>
   } @else {
     <form [formGroup]="form" class="converter-form">
       <div class="form-row">
@@ -23,7 +23,7 @@
             </select>
             <span class="select-arrow" aria-hidden="true">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-              <path d="M7 10l5 5 5-5z" />
+              <path d="M7 10l5 5 5-5z"/>
             </svg>
           </span>
           </div>
@@ -50,7 +50,7 @@
             </select>
             <span class="select-arrow" aria-hidden="true">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-              <path d="M7 10l5 5 5-5z" />
+              <path d="M7 10l5 5 5-5z"/>
             </svg>
           </span>
           </div>

@@ -1,4 +1,4 @@
-import {Component, inject, signal, computed, input, effect,ViewEncapsulation,HostBinding} from '@angular/core';
+import {Component, inject, signal, computed, input, effect, ViewEncapsulation, HostBinding} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ReactiveFormsModule, NonNullableFormBuilder} from '@angular/forms';
 
@@ -14,6 +14,7 @@ export interface CurrencyRate {
   rates: CurrencyRateEntry[];
   updatedAt: string | Date | undefined;
 }
+
 export interface themeColors {
   primary?: string;
   secondary?: string;
@@ -62,8 +63,9 @@ export class CurrencyConverterComponent {
     return Array.from(map.entries()).map(([key, label]) => ({key, label}));
   });
   private fb = inject(NonNullableFormBuilder);
+
   filterCurrencies(excludeKey: string | undefined, direction: 'base' | 'target') {
-   if (!excludeKey) return [];
+    if (!excludeKey) return [];
     return this.uniqueCurrencies().filter(c => {
       const pairBase = direction === 'base' ? c.key : this.form.value.base;
       const pairTarget = direction === 'target' ? c.key : this.form.value.target;
@@ -71,6 +73,7 @@ export class CurrencyConverterComponent {
         this.hasRate(pairBase, pairTarget);
     });
   }
+
   @HostBinding('style.--primary') primaryColor = '';
   @HostBinding('style.--secondary') secondaryColor = '';
   @HostBinding('style.--background') backgroundColor = '';
@@ -117,6 +120,7 @@ export class CurrencyConverterComponent {
       this.surfaceColor = theme.surface ?? '';
     });
   }
+
   updateConvertedAmount(base: string, target: string, active: 'base' | 'target') {
     const rate = this.getRate(base, target);
     if (!rate) return;
@@ -125,14 +129,15 @@ export class CurrencyConverterComponent {
       const baseAmt = this.baseAmount();
       this.form.patchValue({
         targetAmount: +(baseAmt * rate).toFixed(4),
-      }, { emitEvent: false });
+      }, {emitEvent: false});
     } else {
       const targetAmt = this.targetAmount();
       this.form.patchValue({
         baseAmount: +(targetAmt / rate).toFixed(4),
-      }, { emitEvent: false });
+      }, {emitEvent: false});
     }
   }
+
   getRelativeTime(date: Date): string {
     const now = new Date();
     const diffMs = now.getTime() - date.getTime();
@@ -151,10 +156,12 @@ export class CurrencyConverterComponent {
     if (diffDays < 2) return l.yesterday ?? 'yesterday';
     return `${diffDays} ${l.days ?? 'days ago'}`;
   }
+
   private hasRate(base: string | undefined, target: string | undefined): boolean {
     return this.rates()?.some(r => r.base.key === base && r.target.key === target) ?? false;
   }
-  protected getRate(base: string |undefined, target: string|undefined): number | undefined {
+
+  protected getRate(base: string | undefined, target: string | undefined): number | undefined {
     return (
       this.rates()?.find(
         (r) => r.base.key === base && r.target.key === target
