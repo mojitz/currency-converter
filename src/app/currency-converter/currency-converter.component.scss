@@ -39,7 +39,10 @@ $field-gap: var(--field-gap);
   font-size: 1.75rem;
   margin-bottom: 2rem;
 }
-
+.converter-empty{
+  text-align: center;
+  color: $secondary-color;
+}
 .converter-form {
   display: flex;
   flex-direction: column;
