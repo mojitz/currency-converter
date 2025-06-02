@@ -4,7 +4,7 @@
   --background: #0d2853;
   --surface: #2b3d6a;
 
-  --border-radius: 1rem;
+  --border-radius: 10px;
   --padding: 2rem;
   --font-family: 'Roboto', sans-serif;
   --input-height: 3rem;
@@ -46,7 +46,7 @@ $field-gap: var(--field-gap);
 .converter-form {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 0.5rem;
 }
 
 .form-row {

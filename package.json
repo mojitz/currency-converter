@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "build:bundle": "ng build --configuration production --output-hashing=none && cp dist/currency-converter/browser/main.js dist/bundle.js"
+    "build:bundle": "ng build --configuration production --output-hashing=none && cp dist/currency-converter/browser/main.js src/bundle.js"
   },
   "private": true,
   "dependencies": {
